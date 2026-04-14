@@ -1,7 +1,7 @@
 import pytest
 
 from spedy_api import SpedyClient
-from spedy_api.exceptions import AuthenticationError, RateLimitError, ValidationError
+from spedy_api.exceptions import AuthenticationError, NotFoundError, RateLimitError, SpedyServerError, ValidationError
 
 
 def test_production_base_url():
@@ -78,3 +78,29 @@ def test_rate_limit_error_on_429(client, mocked):
         client.companies.get("some-id")
     assert exc_info.value.remaining == "0"
     assert exc_info.value.reset == "2024-01-15T10:01:00Z"
+
+
+def test_not_found_error_on_404(client, mocked):
+    import responses
+
+    mocked.add(
+        responses.GET,
+        "https://sandbox-api.spedy.com.br/v1/companies/some-id",
+        status=404,
+    )
+    with pytest.raises(NotFoundError):
+        client.companies.get("some-id")
+
+
+def test_server_error_on_500(client, mocked):
+    import responses
+
+    mocked.add(
+        responses.GET,
+        "https://sandbox-api.spedy.com.br/v1/companies/some-id",
+        body="Internal Server Error",
+        status=500,
+    )
+    with pytest.raises(SpedyServerError) as exc_info:
+        client.companies.get("some-id")
+    assert exc_info.value.status_code == 500
