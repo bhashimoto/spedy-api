@@ -7,6 +7,20 @@ from .exceptions import (
     SpedyServerError,
     ValidationError,
 )
+from .models import (
+    Address,
+    City,
+    IcmsTax,
+    ItemTaxes,
+    Payment,
+    PisCofinsTax,
+    ProductInvoice,
+    ProductInvoiceItem,
+    ProductInvoiceTotals,
+    Receiver,
+    ServiceInvoice,
+    ServiceInvoiceTotals,
+)
 
 __all__ = [
     "SpedyClient",
@@ -16,4 +30,16 @@ __all__ = [
     "NotFoundError",
     "RateLimitError",
     "SpedyServerError",
+    "City",
+    "Address",
+    "Receiver",
+    "ServiceInvoiceTotals",
+    "ServiceInvoice",
+    "IcmsTax",
+    "PisCofinsTax",
+    "ItemTaxes",
+    "ProductInvoiceItem",
+    "Payment",
+    "ProductInvoiceTotals",
+    "ProductInvoice",
 ]
